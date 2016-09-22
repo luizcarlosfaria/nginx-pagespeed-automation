@@ -19,32 +19,32 @@
                 { "Type": "https", "HostHeaderPattern": "mail.*", "HostPort" : 7443, "ContainerPort": 443 }
             ]
         },{             
-            "ContainerName" : "[SERVICE CONTAINER MYSQL]",
+            "ContainerName" : "mysql-example",
             "Enabled" : false,
             "Binds":[
                 { "Type": "stream", "Port" : 3306 }
             ]
         },{             
-            "ContainerName" : "[SERVICE CONTAINER Redis]",
+            "ContainerName" : "redis-example",
             "Enabled" : false,
             "Binds":[
                 { "Type": "stream", "Port" : 6379 }
             ]
         },{             
-            "ContainerName" : "[SERVICE CONTAINER MongoDB]",
+            "ContainerName" : "mongodb-example",
             "Enabled" : false,
             "Binds":[
                 { "Type": "stream", "Port" : 27017 }
             ]
         },{             
-            "ContainerName" : "[SERVICE CONTAINER RabbitMQ]",
+            "ContainerName" : "rabbitmq-example",
             "Enabled" : false,
             "Binds":[
                 { "Type": "stream", "Port" : 4369 },
                 { "Type": "stream", "Port" : 25672 },
                 { "Type": "stream", "Port" : 5671 },
                 { "Type": "stream", "Port" : 5672 },
-                { "Type": "stream", "Port" : 15672 },
+                { "Type": "http", "Port" : 15672 },
                 { "Type": "stream", "Port" : 61613 },
                 { "Type": "stream", "Port" : 61614 },
                 { "Type": "stream", "Port" : 1883 },

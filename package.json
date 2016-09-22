@@ -6,8 +6,19 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
-  "license": "ISC",
+ "repository": {
+    "type": "git",
+    "url": "git+https://github.com/docker-gallery/nginx-pagespeed-automation.git"
+  },
+   "engines": {
+    "node": "*"
+  },
+ "author": {
+    "name": "Luiz Carlos Faria",
+    "email": "luizcarlosfaria@gmail.com",
+    "url": "http://luizcarlosfaria.net/"
+  },
+  "license": "MIT",
   "dependencies": {
     "ejs": "^2.5.2",
     "is_js": "^0.9.0",
