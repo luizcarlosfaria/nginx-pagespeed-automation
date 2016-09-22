@@ -1,0 +1,62 @@
+{
+    "NginxContainerName": "[NGINX CONTAINER NAME]",
+    "Workers": {
+        "Count": 1,
+        "Connections" : 1024        
+    },
+    "Services" :[
+        {             
+            "ContainerName" : "[SERVICE CONTAINER NAME 1]",
+            "Enabled" : true,
+            "Binds":[
+                { "Type": "stream", "HostPort" : 23, "ContainerPort": 22 },
+                { "Type": "stream", "Port" : 9071 },
+                
+                { "Type": "http",  "HostHeaderPattern": "mail.*", "Port" : 80  },
+                { "Type": "http",  "HostHeaderPattern": "mail.*", "HostPort" : 7080, "ContainerPort": 80 },
+                
+                { "Type": "https", "HostHeaderPattern": "mail.*", "Port" : 443 },                
+                { "Type": "https", "HostHeaderPattern": "mail.*", "HostPort" : 7443, "ContainerPort": 443 }
+            ]
+        },{             
+            "ContainerName" : "[SERVICE CONTAINER MYSQL]",
+            "Enabled" : false,
+            "Binds":[
+                { "Type": "stream", "Port" : 3306 }
+            ]
+        },{             
+            "ContainerName" : "[SERVICE CONTAINER Redis]",
+            "Enabled" : false,
+            "Binds":[
+                { "Type": "stream", "Port" : 6379 }
+            ]
+        },{             
+            "ContainerName" : "[SERVICE CONTAINER MongoDB]",
+            "Enabled" : false,
+            "Binds":[
+                { "Type": "stream", "Port" : 27017 }
+            ]
+        },{             
+            "ContainerName" : "[SERVICE CONTAINER RabbitMQ]",
+            "Enabled" : false,
+            "Binds":[
+                { "Type": "stream", "Port" : 4369 },
+                { "Type": "stream", "Port" : 25672 },
+                { "Type": "stream", "Port" : 5671 },
+                { "Type": "stream", "Port" : 5672 },
+                { "Type": "stream", "Port" : 15672 },
+                { "Type": "stream", "Port" : 61613 },
+                { "Type": "stream", "Port" : 61614 },
+                { "Type": "stream", "Port" : 1883 },
+                { "Type": "stream", "Port" : 8883 }
+            ]
+        }
+
+
+    ],
+    "templates": [
+        { "Name": "Nginx Configuration", "Template": "./templates/nginx.config.template.asp", "Output": "./output/nginx.config"  },
+        { "Name": "Container Recreation", "Template": "./templates/nginx-recreate.sh.template.asp", "Output": "./output/RecreateEntryPointContainer.sh"  }
+    ]
+
+}

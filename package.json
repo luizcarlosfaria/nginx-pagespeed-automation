@@ -1,0 +1,16 @@
+{
+  "name": "nginx-config-parser",
+  "version": "1.0.0",
+  "description": "Parser to simplify nginx configuration",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "ejs": "^2.5.2",
+    "is_js": "^0.9.0",
+    "linq": "^3.0.5"
+  }
+}
