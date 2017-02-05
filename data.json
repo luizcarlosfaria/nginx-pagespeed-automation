@@ -1,62 +1,102 @@
 {
-    "NginxContainerName": "[NGINX CONTAINER NAME]",
+    "NginxContainerName": "EntryPoint",
     "Workers": {
         "Count": 1,
-        "Connections" : 1024        
+        "Connections" : 4096        
     },
     "Services" :[
-        {             
-            "ContainerName" : "[SERVICE CONTAINER NAME 1]",
+		{             
+            "ContainerName" : "LuizCarlosFariaBlog",
+            "Enabled" : true,
+            "Binds":[
+                { "Type": "http", "Port" : 80, "HostHeaderPattern": "endereco.com.br www.endereco.com.br docker.endereco.com.br" },
+                { "Type": "https", "HostPort" : 443, "ContainerPort": 80, "HostHeaderPattern": "endereco.com.br www.endereco.com.br docker.endereco.com.br" }
+            ]
+        },{             
+            "ContainerName" : "wso2esb",
+            "Enabled" : false,
+            "Binds":[
+          		{ "Type": "http", "HostPort" : 80, "ContainerPort": 8020, "HostHeaderPattern": "esb.endereco.com.br api.endereco.com.br", "LocationExtensions": ["proxy_set_header X-Real-IP $remote_addr"] }
+            ]
+        },{             
+            "ContainerName" : "javaApp",
+            "Enabled" : true,
+            "Binds":[
+                { "Type": "http", "HostPort" : 80, "ContainerPort": 8080, "HostHeaderPattern": "jira.endereco.com.br" }                
+            ]
+        },{             
+            "ContainerName" : "zimbra",
             "Enabled" : true,
             "Binds":[
                 { "Type": "stream", "HostPort" : 23, "ContainerPort": 22 },
+                { "Type": "stream", "Port" : 53 },
+                { "Type": "stream", "Port" : 110 },
+                { "Type": "stream", "Port" : 143 },
+                { "Type": "stream", "Port" : 389 },
+                { "Type": "stream", "Port" : 465 },
+                { "Type": "stream", "Port" : 587 },
+                { "Type": "stream", "Port" : 993 },
+                { "Type": "stream", "Port" : 995 },
+                { "Type": "stream", "Port" : 3443 },
                 { "Type": "stream", "Port" : 9071 },
-                
-                { "Type": "http",  "HostHeaderPattern": "mail.*", "Port" : 80  },
-                { "Type": "http",  "HostHeaderPattern": "mail.*", "HostPort" : 7080, "ContainerPort": 80 },
-                
-                { "Type": "https", "HostHeaderPattern": "mail.*", "Port" : 443 },                
-                { "Type": "https", "HostHeaderPattern": "mail.*", "HostPort" : 7443, "ContainerPort": 443 }
+                { "Type": "stream", "HostPort" : 444, "ContainerPort": 443 },
+                { "Type": "http", "Port" : 80, "HostHeaderPattern": "mail.*" },
+                { "Type": "https", "Port" : 443, "HostHeaderPattern": "mail.*", "LocationExtensions": ["proxy_set_header X-Real-IP $remote_addr"] },                
+                { "Type": "https", "Port" : 7071, "HostHeaderPattern": "mail.*", "LocationExtensions": ["proxy_set_header X-Real-IP $remote_addr"] }
             ]
         },{             
-            "ContainerName" : "mysql-example",
+            "ContainerName" : "PosteIO",
             "Enabled" : false,
+            "Binds":[
+                { "Type": "stream", "Port" : 25 },
+                { "Type": "stream", "Port" : 110 },
+                { "Type": "stream", "Port" : 143 },
+                { "Type": "stream", "Port" : 465 },
+                { "Type": "stream", "Port" : 587 },
+                { "Type": "stream", "Port" : 993 },
+                { "Type": "stream", "Port" : 995 },                
+            	{"Type": "stream", "HostPort" : 1080,  "ContainerPort": 80 },
+            	{"Type": "stream", "HostPort" : 10443,  "ContainerPort": 443 },
+                { "Type": "http", "HostPort" : 80,  "ContainerPort": 80, "HostHeaderPattern": "mail.*", "LocationExtensions": ["proxy_set_header X-Real-IP $remote_addr"] },
+                { "Type": "https", "HostPort" : 443,  "ContainerPort": 443, "HostHeaderPattern": "mail.*", "LocationExtensions": ["proxy_set_header X-Real-IP $remote_addr"] }
+            ]
+        },{             
+            "ContainerName" : "MySQL",
+            "Enabled" : true,
             "Binds":[
                 { "Type": "stream", "Port" : 3306 }
             ]
         },{             
-            "ContainerName" : "redis-example",
-            "Enabled" : false,
+            "ContainerName" : "Redis",
+            "Enabled" : true,
             "Binds":[
                 { "Type": "stream", "Port" : 6379 }
             ]
         },{             
-            "ContainerName" : "mongodb-example",
-            "Enabled" : false,
+            "ContainerName" : "MongoDB",
+            "Enabled" : true,
             "Binds":[
                 { "Type": "stream", "Port" : 27017 }
             ]
         },{             
-            "ContainerName" : "rabbitmq-example",
-            "Enabled" : false,
+            "ContainerName" : "RabbitMQ",
+            "Enabled" : true,
             "Binds":[
                 { "Type": "stream", "Port" : 4369 },
                 { "Type": "stream", "Port" : 25672 },
                 { "Type": "stream", "Port" : 5671 },
                 { "Type": "stream", "Port" : 5672 },
-                { "Type": "http", "Port" : 15672 },
+                { "Type": "stream", "Port" : 15672 },
                 { "Type": "stream", "Port" : 61613 },
                 { "Type": "stream", "Port" : 61614 },
                 { "Type": "stream", "Port" : 1883 },
                 { "Type": "stream", "Port" : 8883 }
             ]
         }
-
-
     ],
     "templates": [
-        { "Name": "Nginx Configuration", "Template": "./templates/nginx.config.template.asp", "Output": "./output/nginx.config"  },
-        { "Name": "Container Recreation", "Template": "./templates/nginx-recreate.sh.template.asp", "Output": "./output/RecreateEntryPointContainer.sh"  }
+        { "Name": "Nginx Configuration", "Template": "./templates/nginx.config.template.asp", "Output": "./output/nginx.conf"  },
+        { "Name": "Container Recreation", "Template": "./templates/nginx-recreate.sh.template.asp", "Output": "./output/rebuild-container.generated.sh"  }
     ]
 
 }

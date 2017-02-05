@@ -5,11 +5,19 @@ docker run \
 -d \
 --name <%= data.NginxContainerName %> \
 --hostname <%= data.NginxContainerName %> \
---network=front \<% Enumerable.from(data.Services).where("$.Enabled").toArray().forEach(function(service){ 
+--network=front \<% 
+	var portsInUse = [];
+Enumerable.from(data.Services).where("$.Enabled").toArray().forEach(function(service){ 
 	var result = Enumerable.from(service.Binds).select(function(bind){
 		var bindPort = is.existy(bind.Port)?bind.Port : bind.HostPort;
 		var containerPort = is.existy(bind.Port)?bind.Port : bind.ContainerPort;
-		return "-p " + bindPort + ":" + containerPort;
+		var returnValue = "";
+		if(Enumerable.from(portsInUse).any(function(it){ return it == bindPort}) == false)
+		{
+        	portsInUse.push(bindPort);
+			return "-p " + bindPort + ":" + containerPort;
+		}
+		return returnValue;
 	}).toArray().join(" "); 
 %>
 <%= result %> \<%
